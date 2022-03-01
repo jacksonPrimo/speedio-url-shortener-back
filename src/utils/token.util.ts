@@ -1,5 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
+import { RefreshToken } from '@prisma/client';
 import { decode, sign, TokenExpiredError, verify } from 'jsonwebtoken';
+import { v4 } from 'uuid';
 
 interface TokenPayload {
   role: string;
@@ -15,6 +17,20 @@ export class TokenUtil {
   public generateToken(payload: any) {
     const token = sign({ ...payload }, this.secret, { expiresIn: this.jwtExpiration });
     return token;
+  }
+  public generateRefreshToken(userId: string) {
+    let expiredAt = new Date();
+    expiredAt.setSeconds(expiredAt.getSeconds() + this.jwtRefreshExpiration);
+    const refreshToken = {
+      userId,
+      token: v4(),      
+      expiryDate: expiredAt
+    };
+    return refreshToken;
+  }
+  
+  public async validateRefreshToken(token: RefreshToken){
+    return token.expiryDate.getTime() > new Date().getTime();
   }
 
   public async validateToken(token: string) {

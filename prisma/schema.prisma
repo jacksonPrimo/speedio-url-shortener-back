@@ -10,11 +10,19 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model RefreshToken {
+  token         String    @id
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  expiryDate    DateTime
+}
+
 model User {
-  id                    Int      @id @default(autoincrement())
+  id                    String   @id @default(uuid())
   name                  String   @db.VarChar(255)
   email                 String   @unique
   password              String
+  refreshToken          RefreshToken?
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }
