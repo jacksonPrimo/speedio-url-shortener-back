@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  speedio:
+    container_name: 'speedio'
+    image: postgres:alpine
+    ports:
+      - '5432:5432'
+    restart: always
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: dbpassword
+      POSTGRES_DB: speedio_dev
+ 
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+
+volumes:
+  pg-data:
