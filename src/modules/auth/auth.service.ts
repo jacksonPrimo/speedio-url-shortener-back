@@ -14,7 +14,7 @@ export class AuthService {
   ){}
   async signup(data: Prisma.UserCreateInput): Promise<User> {
     data.password = this.cryptographyUtil.encryptPassword(data.password);
-    const emailAlreadyInUse = this.prisma.user.findFirst({
+    const emailAlreadyInUse = await this.prisma.user.findFirst({
       where: {
         email: data.email,
       }
@@ -67,7 +67,19 @@ export class AuthService {
     })
     return {
       accessToken: newAccessToken,
-      refreshToken,
     };
+  }
+  async deleteToken(token){
+    const refreshTokenFound = await this.prisma.refreshToken.findFirst({ 
+      where: { token }, 
+    });
+    if (!refreshTokenFound) {
+      throw new HttpException("Refresh token is not in database", 403);
+    }
+    return await this.prisma.refreshToken.delete({
+      where: {
+        token
+      }
+    })
   }
 }

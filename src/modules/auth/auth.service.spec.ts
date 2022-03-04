@@ -131,6 +131,25 @@ describe('AuthService', () => {
       })
     })
   })
+  describe('signout', ()=>{
+    it('should delete refresh token', async () => {
+      const refreshToken = TestUtil.getRefreshTokenValid()
+  
+      mockPrismaService.refreshToken.findFirst.mockResolvedValue(refreshToken)
+      mockPrismaService.refreshToken.delete.mockResolvedValue(refreshToken)
+  
+      const refreshTokenDeleted = await authService.deleteToken(refreshToken.token)
+      expect(refreshTokenDeleted).toMatchObject(refreshToken)
+    })
+    it('should return a exception case token not found', async () => {  
+      const refreshToken = TestUtil.getRefreshTokenValid()
+      mockPrismaService.refreshToken.findFirst.mockResolvedValue(null)
+  
+      await authService.deleteToken(refreshToken.token).catch(e=>{
+        expect(e).toMatchObject({message: 'Refresh token is not in database'})
+      })
+    })
+  })
   describe('refresh_token', ()=>{
     it('should refresh token', async () => {
       const user = TestUtil.getUserValid()
@@ -146,7 +165,6 @@ describe('AuthService', () => {
   
       const refreshTokenCreated = await authService.refreshToken('123456')
       expect(refreshTokenCreated).toMatchObject({
-        refreshToken: refreshToken.token,
         accessToken: token
       })
     })
