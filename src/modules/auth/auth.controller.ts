@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post, Res } from '@nestjs/common';
 import { ApiBody, ApiOkResponse } from '@nestjs/swagger';
 import { Response } from 'express';
 import { AccessTokenResponseDto, RefreshTokenBodyDto, SigninBodyDto, SignupBodyDto } from 'src/dtos/auth.dto';
@@ -28,6 +28,18 @@ export class AuthController {
   ) {
     const userAuth = await this.authService.signin(body.email, body.password)
     res.status(200).send(userAuth)
+  }
+
+  @Delete('signout/:token')
+  @ApiOkResponse({description: 'signout success!'})
+  @ApiBody({ type: RefreshTokenBodyDto })
+  async signout(
+    @Param() params: { token: string },
+    @Res() res: Response
+  ) {
+    const resp = await this.authService.deleteToken(params.token)
+    console.log(resp)
+    res.status(200).send()
   }
 
   @Post('refreshToken')

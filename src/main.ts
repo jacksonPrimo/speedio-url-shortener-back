@@ -7,6 +7,11 @@ import { PrismaService } from './prisma.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  // cors config
+  app.enableCors({
+    credentials: true,
+    origin: process.env.CORS_ORIGIN || '*',
+  }); 
   // prisma config
   const prismaService: PrismaService = app.get(PrismaService);
   prismaService.enableShutdownHooks(app);
@@ -26,7 +31,7 @@ async function bootstrap() {
     if(error instanceof HttpException){
       response.send(error.getStatus).send(error.message)
     } else {
-      response.send(500).send('server internal error')
+      response.send(500).send('Internal server error')
     }
   })
 

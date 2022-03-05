@@ -12,11 +12,11 @@ export class LoggedGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const { authorization } = request.headers;
     if (!authorization) {
-      throw new HttpException('token not provided', 401);
+      throw new HttpException('token not provided', 403);
     }
     const [, token] = authorization.split(' ');
     if (!token) {
-      throw new HttpException('token not provided', 401);
+      throw new HttpException('token not provided', 403);
     }
     await this.tokenUtil.validateToken(token);
     return true;
