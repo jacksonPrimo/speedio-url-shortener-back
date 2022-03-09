@@ -1,4 +1,4 @@
-import { RefreshToken, User } from "@prisma/client";
+import { RefreshToken, Url, User } from "@prisma/client";
 
 export class TestUtil {
   static getUserValid(): User {
@@ -19,5 +19,28 @@ export class TestUtil {
       userId: '1'
     }
     return refreshToken;
+  }
+  static getUrlValidWithoutUser(): Url {
+    const url: Url = {
+      id: "1",
+      userId: null,
+      originalUrl: "example.com",
+      views: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+    return url
+  }
+  static getUrlValidWithUser(): Url {
+    const user = this.getUserValid()
+    const url: Url = {
+      id: "1",
+      userId: user.id,
+      originalUrl: "example.com",
+      views: 0,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }
+    return url
   }
 }
