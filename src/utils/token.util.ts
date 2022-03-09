@@ -4,8 +4,8 @@ import { decode, sign, TokenExpiredError, verify } from 'jsonwebtoken';
 import { v4 } from 'uuid';
 
 interface TokenPayload {
-  role: string;
-  id: number;
+  email: string;
+  id: string;
 }
 
 @Injectable()
