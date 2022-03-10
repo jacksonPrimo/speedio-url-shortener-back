@@ -23,7 +23,7 @@ export class UrlController {
     return urls
   }
 
-  @Get('/mostViwed')
+  @Get('/mostViewed')
   @ApiOkResponse({ description: 'urls found', type: [UrlResponseDto] })
   async mostViwed(): Promise<UrlModel[]> {
     const urls = await this.urlService.listTop100();
