@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Headers, HttpException, Param, Post, Put, Res, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiBody,  ApiOkResponse } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Headers, HttpException, Param, Post, UseGuards } from '@nestjs/common';
+import { ApiBearerAuth, ApiBody,  ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { UrlService } from './url.service';
 import { Url as UrlModel } from '@prisma/client'
 import { TokenUtil } from 'src/utils/token.util';
@@ -57,6 +57,10 @@ export class UrlController {
   @Delete('/:id')
   @UseGuards(LoggedGuard)
   @ApiBearerAuth()
+  @ApiParam({
+    name: 'id',
+    description: 'url id',
+  })
   @ApiOkResponse({description: 'successful on delete url!', type: UrlResponseDto})
   async delete(
     @Param() params: { id: string },
@@ -70,6 +74,10 @@ export class UrlController {
   }
 
   @Get('/:id')
+  @ApiParam({
+    name: 'id',
+    description: 'url id',
+  })
   @ApiOkResponse({description: 'successful on delete url!', type: UrlResponseDto})
   async find(
     @Param() params: { id: string },
