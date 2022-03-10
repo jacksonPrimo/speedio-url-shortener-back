@@ -17,12 +17,23 @@ model RefreshToken {
   expiryDate    DateTime
 }
 
+model Url {
+  id            String    @id
+  originalUrl   String
+  views         Int       @default(0)
+  userId        String?
+  user          User?      @relation(fields: [userId], references: [id])
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
 model User {
   id                    String   @id @default(uuid())
   name                  String   @db.VarChar(255)
   email                 String   @unique
   password              String
   refreshToken          RefreshToken[]
+  urls                  Url[]
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
 }

@@ -1,4 +1,4 @@
-import { HttpException } from '@nestjs/common';
+import { HttpException, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NextFunction, Request, Response } from 'express';
@@ -26,6 +26,7 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
 
+  // exception catch
   app.use((error: any, request: Request, response: Response, nest: NextFunction)=>{
     console.log(error)
     if(error instanceof HttpException){
@@ -34,6 +35,9 @@ async function bootstrap() {
       response.send(500).send('Internal server error')
     }
   })
+
+  // pipe of validation cnfig
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(process.env.PORT || 3000);
 }
