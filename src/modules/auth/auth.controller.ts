@@ -24,10 +24,8 @@ export class AuthController {
   @ApiBody({type: SigninBodyDto})
   async signin(
     @Body() body: {email: string, password: string},
-    @Res() res: Response
   ) {
-    const userAuth = await this.authService.signin(body.email, body.password)
-    res.status(200).send(userAuth)
+    return await this.authService.signin(body.email, body.password)
   }
 
   @Delete('signout/:token')
@@ -35,11 +33,8 @@ export class AuthController {
   @ApiBody({ type: RefreshTokenBodyDto })
   async signout(
     @Param() params: { token: string },
-    @Res() res: Response
   ) {
-    const resp = await this.authService.deleteToken(params.token)
-    console.log(resp)
-    res.status(200).send()
+    return await this.authService.deleteToken(params.token)
   }
 
   @Post('refreshToken')
@@ -47,9 +42,7 @@ export class AuthController {
   @ApiBody({ type: RefreshTokenBodyDto })
   async refreshToken(
     @Body() body: { refreshToken: string },
-    @Res() res: Response
   ) {
-    const newAccessToken = await this.authService.refreshToken(body.refreshToken)
-    res.status(200).send(newAccessToken)
+    return await this.authService.refreshToken(body.refreshToken)
   }
 }
