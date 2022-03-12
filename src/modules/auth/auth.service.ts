@@ -1,6 +1,5 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
-import { AccessTokenResponseDto } from 'src/dtos/auth.dto';
 import { PrismaService } from 'src/prisma.service';
 import { CryptographyUtil } from 'src/utils/cryptography.util';
 import { TokenUtil } from 'src/utils/token.util';
@@ -14,18 +13,19 @@ export class AuthService {
   ){}
   async signup(data: Prisma.UserCreateInput): Promise<User> {
     data.password = this.cryptographyUtil.encryptPassword(data.password);
-    const emailAlreadyInUse = await this.prisma.user.findFirst({
-      where: {
-        email: data.email,
-      }
-    })
-    if(emailAlreadyInUse){
-      throw new HttpException('Email already in use', 400);
+    try {
+      const userCreated = await this.prisma.user.create({
+        data,
+      });
+      return userCreated;
     }
-    const userCreated = await this.prisma.user.create({
-      data,
-    });
-    return userCreated;
+    catch(e){
+      if (e instanceof Prisma.PrismaClientKnownRequestError && e.code === 'P2002') {
+        throw new HttpException("Email already in use", 400)
+      } else {
+        throw e
+      }
+    }
   }
   async signin(email: string, password: string){
     const user = await this.prisma.user.findFirst({
