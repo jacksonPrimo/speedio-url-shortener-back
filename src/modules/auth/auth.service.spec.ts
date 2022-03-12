@@ -1,12 +1,9 @@
-import { HttpException, NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { User } from '@prisma/client';
-import { AccessTokenResponseDto, RefreshTokenBodyDto, SigninBodyDto, SignupBodyDto } from 'src/dtos/auth.dto';
+import { SigninBodyDto, SignupBodyDto } from 'src/dtos/auth.dto';
 import { PrismaService } from 'src/prisma.service';
 import { CryptographyUtil } from 'src/utils/cryptography.util';
 import { TokenUtil } from 'src/utils/token.util';
 import { TestUtil } from 'src/utils/test.util';
-import { UserService } from '../user/user.service';
 import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
