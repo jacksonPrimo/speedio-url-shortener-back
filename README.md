@@ -1,73 +1,88 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
-</p>
+# speedio-url-shortener-back
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## sobre o projeto :computer:
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Este projeto tem como principal função servir de API para p projeto speedio-url-shortener-front
 
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
-## Installation
+## Como executar o projeto :collision:
+<ol>
+  <li>
+  Instale as dependencias do projeto:
 
 ```bash
-$ npm install
+  $ npm install
 ```
-
-## Running the app
+  </li>
+  <li>
+  Caso não tenha um banco de dados postgres local, roda o seguinte comando para criar um container no docker contendo uma instancia de um banco. Ele pega as instruções contidas no arquivo docker-compose.yml
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+  # Lembrando que antes você precisa instalar o docker e o docker-compose em sua maquina.
+  # Se precisar de um painel para administrar o banco local, basta retirar os comentários do arquivo docker-compose.yml antes de executar o comando.
+  # E por fim caso esteja usando o windows abra o Docker Desktop antes de executar o comando.
+  $ docker-compose up
 ```
-
-## Test
+  </li>
+  <li>
+  Execute as migrations para que o banco de dados local fique atualizado.
 
 ```bash
-# unit tests
+  $ npm run migrate:dev
+```
+  </li>
+  <li>
+  Execute a aplicação em modo de desenvolvimento com hot reload:
+
+```bash
+  $ npm run start:dev
+```
+  </li>
+  <li>
+  Ou se preferir crie uma build do projeto e execute os arquivos de distribuição:
+
+```bash
+  # este comando irá gerar uma pasta dist e executará o arquivo main.js dentro da mesma.
+  $ npm start
+```
+  </li>
+</ol>
+
+
+## lista de outros comandos :space_invader:
+
+```bash
+
+# rodar os testes unitários
 $ npm run test
+# rodar os testes unitários com hot reload:
+$ npm run test:watch
 
-# e2e tests
+# rodar os testes de integração usando cypress
 $ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
 ```
 
-## Support
+## Diretórios do projeto :file_folder:
+Aqui estão alguns diretórios importantes para uma boa familiarização do projeto
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### `dtos`
 
-## Stay in touch
+Este diretório contém arquivos com classes que indicam o formato que os dados devem ter ao longo do ciclo de vida dos processos da aplicação, como por exemplo o formato dos dados que devem vir nas requisições e que devem ir nas respostas.
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+### `guards`
 
-## License
+Este diretório contém middlewares que impedem o acesso a determinado endpoint da api baseado em critérios de autenticação e tipo de usuário.
 
-Nest is [MIT licensed](LICENSE).
+### `modules`
+
+Este diretório abriga os modulos da aplicação, cada um contendo uma série de arquivos que vão desde a manipulação das requisições até o a comunicação com o banco de dados:
+
+#### `.service`
+responsável pela comunicação com o banco de dados.
+#### `.controller`
+responsável por manusear as requisições extraindo apenas o necessário de cada uma.
+#### `.module`
+responsável por 'envelopar' os demais arquivos e fazer a injeção de suas dependências. 
+
+### `utils`
+
+Este diretório contem arquivos com funções que normalmente abstraem taréfas repetivivas ao longo da aplicação, como a manipulação do accessToken.

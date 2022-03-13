@@ -1,7 +1,7 @@
 {
   "name": "speedio-url-shortener-back",
   "version": "0.0.1",
-  "description": "Este projeto tem como principal função servir de API para p projeto speedio-url-shortener-back",
+  "description": "Este projeto tem como principal função servir de API para p projeto speedio-url-shortener-front",
   "author": "Jackson Aquino Primo",
   "private": false,
   "license": "MIT",
