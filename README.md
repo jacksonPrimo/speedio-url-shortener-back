@@ -86,3 +86,7 @@ responsável por 'envelopar' os demais arquivos e fazer a injeção de suas depe
 ### `utils`
 
 Este diretório contem arquivos com funções que normalmente abstraem taréfas repetivivas ao longo da aplicação, como a manipulação do accessToken.
+
+## Documentação da api :blue_book:
+Segue abaixo o link contendo a documentação da api feita com swagger:
+https://speedio-url-shortener-back.herokuapp.com/doc/
