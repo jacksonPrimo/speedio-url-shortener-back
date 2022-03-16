@@ -10,7 +10,7 @@ interface TokenPayload {
 
 @Injectable()
 export class TokenUtil {
-  private secret = 'apenasumtest'
+  private secret = process.env.JWT_SECRET || 'jwt_key_development';
   private jwtExpiration = 3600
   private jwtRefreshExpiration = 86400
 
