@@ -36,14 +36,39 @@ export class UrlService {
     return urlFound
   }
 
-  async listTop100(): Promise<Url[]> {
-    const urlFound = await this.prisma.url.findMany({
-      take: 100,
-      orderBy: { views: 'desc' },
-    });
+  async listTop100(userId?: string): Promise<Url[]> {
+    let urlFound: any[]
+    if(userId){
+      urlFound = await this.prisma.url.findMany({
+        take: 100,
+        orderBy: { views: 'desc' },
+        include: {
+          favorite: {
+            select: { id: true },
+            where: {
+              userId
+            }
+          }
+        }
+      });
+      urlFound = urlFound.map((url: any)=>{
+        if(url.favorite.length){
+          url.favorite = url.favorite[0].id;
+        } else {
+          url.favorite = null
+        }
+        return url
+      })
+    } else {
+      urlFound = await this.prisma.url.findMany({
+        take: 100,
+        orderBy: { views: 'desc' },
+      });
+    }
+
     if(!urlFound || !urlFound.length){
       throw new HttpException('Urls not found', 404);
-    } 
+    }
     return urlFound
   }
 

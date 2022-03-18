@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Headers, HttpException, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Header, Headers, HttpException, Param, Post, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiBody,  ApiOkResponse, ApiParam } from '@nestjs/swagger';
 import { UrlService } from './url.service';
 import { Url as UrlModel } from '@prisma/client'
@@ -25,8 +25,23 @@ export class UrlController {
 
   @Get('/mostViewed')
   @ApiOkResponse({ description: 'urls found', type: [UrlResponseDto] })
-  async mostViwed(): Promise<UrlModel[]> {
-    const urls = await this.urlService.listTop100();
+  async mostViwed(
+    @Headers() headers: any,
+  ): Promise<UrlModel[]> {
+    const { authorization } = headers;
+    let urls: UrlModel[];
+    if(authorization){
+      const [, token] = authorization.split(' ');
+
+      if (!token) {
+        throw new HttpException('token not provided', 403);
+      }
+      await this.tokenUtil.validateToken(token);
+      const { id: userId } = this.tokenUtil.decodeToken(token)
+      urls = await this.urlService.listTop100(userId);
+    } else {
+      urls = await this.urlService.listTop100();
+    }
     return urls
   }
 
