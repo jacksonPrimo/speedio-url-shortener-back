@@ -12,7 +12,7 @@ export class FavoriteService {
       where: { id: data.urlId }
     })
     if(!urlFound){
-      throw new HttpException('Url not found', 404);
+      throw new HttpException('Favorite not found', 404);
     }
     return await this.prisma.favorite.create({
       data

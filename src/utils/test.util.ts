@@ -1,4 +1,4 @@
-import { RefreshToken, Url, User } from "@prisma/client";
+import { Favorite, RefreshToken, Url, User } from "@prisma/client";
 
 export class TestUtil {
   static getUserValid(): User {
@@ -42,5 +42,17 @@ export class TestUtil {
       updatedAt: new Date(),
     }
     return url
+  }
+  static getFavoriteValid(): Favorite {
+    const user = this.getUserValid()
+    const url = this.getUrlValidWithoutUser()
+    const favorite: Favorite = {
+      userId: user.id,
+      id: '123456',
+      urlId: url.id,
+      createdAt: new Date(), 
+      updatedAt: new Date()  
+    }
+    return favorite
   }
 }
