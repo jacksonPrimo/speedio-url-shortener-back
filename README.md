@@ -2,7 +2,7 @@
 
 ## sobre o projeto :computer:
 
-Este projeto tem como principal função servir de API para p projeto speedio-url-shortener-front
+Este projeto tem como principal função servir de API para p projeto url-shortener-front
 
 ## Como executar o projeto :collision:
 <ol>
